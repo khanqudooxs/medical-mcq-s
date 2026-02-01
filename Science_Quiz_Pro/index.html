@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Quiz Pro | Ultra Edition</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <div class="logo" onclick="showView('landing')" style="cursor: pointer;">
+            <span class="logo-icon"><i class="fas fa-atom"></i></span>
+            <span class="logo-text">Science<span>Quiz</span>Pro</span>
+        </div>
+        <div class="nav-links">
+            <a href="javascript:void(0)" onclick="showView('landing')" class="active">Home</a>
+            <span style="color: #00ff88; font-weight: 600; font-size: 0.9rem;"><i class="fas fa-database"></i> Database:
+                Auto-Connected</span>
+        </div>
+    </nav>
+
+    <main id="app">
+        <!-- Landing View -->
+        <section id="landing" class="view active">
+            <header class="hero">
+                <div class="hero-banner">
+                    <img src="banner.png" alt="Science Banner">
+                </div>
+                <h1 class="animate-up">Master <span>Science</span> Encyclopedia</h1>
+                <p class="animate-up delay-1">All 9,000+ MCQs across Physics, Chemistry, and Biology are now fully
+                    loaded and ready to study. No uploading required.</p>
+                <div class="hero-actions animate-up delay-1">
+                    <button class="btn-primary" onclick="selectSubject('Physics')">Explore All Books</button>
+                </div>
+            </header>
+
+            <div class="subject-grid">
+                <div class="subject-card physics" onclick="selectSubject('Physics')">
+                    <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Physics</h3>
+                    <p>All Chapters Included</p>
+                </div>
+                <div class="subject-card chemistry" onclick="selectSubject('Chemistry')">
+                    <div class="card-icon"><i class="fas fa-flask"></i></div>
+                    <h3>Chemistry</h3>
+                    <p>Full Series Ready</p>
+                </div>
+                <div class="subject-card biology" onclick="selectSubject('Biology')">
+                    <div class="card-icon"><i class="fas fa-dna"></i></div>
+                    <h3>Biology</h3>
+                    <p>Complete Database</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Topics List View -->
+        <section id="topics" class="view">
+            <div class="container-header">
+                <button class="btn-back" onclick="showView('landing')"><i class="fas fa-chevron-left"></i> Back to
+                    Home</button>
+            </div>
+            <h2 id="subject-title">Subject Topics</h2>
+            <div id="topic-list" class="topic-grid">
+                <!-- Topics injected here -->
+            </div>
+        </section>
+
+        <!-- Mode Selection -->
+        <section id="mode-select" class="view">
+            <div class="container-header">
+                <button class="btn-back" onclick="showView('topics')"><i class="fas fa-chevron-left"></i> Back to
+                    Topics</button>
+            </div>
+            <div class="mode-container">
+                <h2 id="mode-title">Topic Name</h2>
+                <div class="mode-grid">
+                    <div class="mode-card" onclick="initQuizMode()">
+                        <div class="mode-icon"><i class="fas fa-stopwatch"></i></div>
+                        <h3>Exam Mode</h3>
+                        <p>Timed practice. Perfect for testing your speed and knowledge.</p>
+                        <button class="btn-primary">Start Exam</button>
+                    </div>
+                    <div class="mode-card" onclick="initBookMode()">
+                        <div class="mode-icon"><i class="fas fa-book-open"></i></div>
+                        <h3>Book Mode</h3>
+                        <p>Read like a textbook. Study answers at your own pace.</p>
+                        <button class="btn-secondary">Read Book</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz View -->
+        <section id="quiz" class="view">
+            <div class="quiz-card">
+                <div class="quiz-nav">
+                    <div class="topic-tag"><span id="quiz-topic-name">Topic</span></div>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="q-progress-fill" class="fill"></div>
+                </div>
+                <div class="question-box">
+                    <h3 id="question-text">Question loading...</h3>
+                </div>
+                <div id="options-container" class="options-container"></div>
+                <div class="quiz-controls">
+                    <button class="btn-quit" onclick="showView('landing')">Quit</button>
+                    <button id="next-btn" class="btn-primary" onclick="handleNext()" disabled>Next <i
+                            class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Book View -->
+        <section id="book-mode" class="view">
+            <div class="book-sticky-header">
+                <button class="btn-back" onclick="showView('mode-select')"><i class="fas fa-chevron-left"></i>
+                    Back</button>
+                <h2 id="book-header-title">Topic Title</h2>
+                <button class="btn-secondary" onclick="toggleAllAnswers()">Show/Hide All Answers</button>
+            </div>
+            <div id="book-content" class="book-layout"></div>
+        </section>
+
+        <!-- Results View -->
+        <section id="results" class="view">
+            <div class="result-card">
+                <div class="score-circle"><span id="score-val">0</span><small id="score-pct">0%</small></div>
+                <h2>Practice Complete!</h2>
+                <div class="result-btns">
+                    <button class="btn-primary" onclick="showView('landing')">Home</button>
+                    <button class="btn-secondary" onclick="initQuizMode()">Try Again</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="data/master_library.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
